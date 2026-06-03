@@ -1,14 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sylvakru/base/app.dart';
 
-class DynamicRoute<T> extends PageRouteBuilder<T> {
-  DynamicRoute({required super.pageBuilder}) : super(opaque: false);
+class DynamicDatailRoute extends PageRouteBuilder {
+  DynamicDatailRoute({required super.pageBuilder});
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 500);
+  Duration get transitionDuration => Duration(milliseconds: 500);
 
   @override
-  Duration get reverseTransitionDuration => const Duration(milliseconds: 500);
+  Duration get reverseTransitionDuration => Duration(milliseconds: 500);
+
+  @override
+  bool get opaque => false;
 
   @override
   Widget buildTransitions(
@@ -27,13 +32,13 @@ class DynamicRoute<T> extends PageRouteBuilder<T> {
         if (isMobile && orientation == Orientation.portrait) {
           return SlideTransition(
             position: Tween<Offset>(
-              begin: Offset(0, 1),
+              begin: Offset(Platform.isIOS ? 1.0 : -1.0, 0.0),
               end: Offset.zero,
             ).animate(curved),
             child: child,
           );
         } else {
-          return FadeTransition(opacity: curved, child: child);
+          return child;
         }
       },
     );
